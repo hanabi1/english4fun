@@ -1,0 +1,41 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color:blue
+}
+
+#main-wrapper {
+    width:80%;
+    margin-left: 10%;
+    margin-right:10%;
+    margin-top:5%;
+    min-height: 500px;
+    background-color: Lightblue;
+}
+footer{
+    text-align: center;
+    margin:30px auto 30px auto;
+}
+
+.sidebar-left{
+    width:15%;
+    left:5%;
+    top:20%;
+    background-color: Darkblue;
+    position: absolute;
+    border: 1px solid black;
+    padding:10px;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+td{padding-bottom:20px;}
+table{border:1px solid black;}
+@media screen and (max-width: 991px) {
+    #sidebar-left{
+        display: none;
+    }
+
+}
