@@ -15,7 +15,7 @@ class UserModel
     //Queries the DB for credentials connected to a username
 	private function getUserCredentialsFromDB($userName)
     {
-        $sql = "SELECT username, password,userlevel FROM users where username=:username";
+        $sql = "SELECT username, hash,userlevel FROM users where username=:username";
         $query = $this->db->prepare($sql);
         $query->execute(array('username'=>$userName));
 
@@ -24,37 +24,33 @@ class UserModel
     }
 
     public function userLogIn($username,$password){
-        
+        require_once('application/utils/hashing.php'); 
         //If There is a session with name and pass, Check it with DB
         if(isset($username,$password)){
             //Ask loginModel for user credentials 
             $userDataFromDB = $this->getUserCredentialsFromDB($username);
             //Compare the DB credentials to our session variable
-            if($userDataFromDB['username'] === $username &&
-               $userDataFromDB['password'] === $password){
-                
+            if(validate_password($password,$userDataFromDB['hash'])===true){
+        
                 //admin = userlevel 1
                 //User  = userlevel 2
                 return $userDataFromDB['userlevel'];
             }
         }
-        //Anon/Invalid user detected, returning false
+        //Invalid username/password, returning false
         return false;
     }
 
     public function isUserLoggedIn(){
-       
-        //Creates a LoginModel if there isn't allready one
-        //$this->createUserModel();
+        require_once('application/utils/hashing.php');
         
         //If There is a session with name and pass, Check it with DB
         if(isset($_SESSION['username']) && isset($_SESSION['password'])){
             //Ask loginModel for user credentials 
             $userDataFromDB = $this->getUserCredentialsFromDB($_SESSION['username']);
             //Compare the DB credentials to our session variable
-            if($userDataFromDB['username'] === $_SESSION['username'] &&
-               $userDataFromDB['password'] === $_SESSION['password']){
-                
+            if(validate_password($_SESSION['password'],$userDataFromDB['hash'])===true){
+        
                 //admin = userlevel 1
                 //User  = userlevel 2
                 return $userDataFromDB['userlevel'];

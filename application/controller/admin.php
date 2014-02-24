@@ -16,9 +16,9 @@ class Admin extends Controller
      */
     public function index()
     {
-        // debug message to show where you are, just for the demo
-        //echo 'Message from Controller: You are in the controller Admin, using the method index()';
-      
+        if($this->userModel->isUserLoggedIn()!==1){
+            $this->redirect('login');
+        }
         //Loads the model to recieve lesson plans data
         $lessonPlansModel = $this->loadModel('lessonPlansModel');
 
@@ -35,4 +35,21 @@ class Admin extends Controller
         require 'application/views/admin/index.php';
         require 'application/views/_templates/footer.php';
     }
+/*
+    public function addUser()
+    {
+        if($this->userModel->isUserLoggedIn()!==1){
+            //$this->redirect('home');
+        }
+        // Check if we have POST data to create a new LessonPlan entry
+        if (isset($_POST["name"],$_POST["title"],$_POST["content"])) {
+            // load model, perform an action on the model
+            $lessonPlansModel = $this->loadModel('LessonPlansModel');
+            $lessonPlansModel->addLessonPlan($_POST["name"],$_POST["title"],$_POST["content"]);
+        }
+
+        // where to go after song has been added
+        header('location: ' . URL . 'admin/');
+    }
+*/
 }
