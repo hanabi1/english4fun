@@ -21,7 +21,7 @@ class Login extends Controller
         $userModel = $this->loadModel('UserModel');
         
         if($this->userModel->isUserLoggedIn()){
-           $this->redirect('allreadyloggedin');
+           $this->redirect('home');
         }
 
         if (isset($_POST["username"]) && isset($_POST["password"])){

@@ -17,7 +17,7 @@ class Admin extends Controller
     public function index()
     {
         if($this->userModel->isUserLoggedIn()!==1){
-            $this->redirect('login');
+            $this->redirect('home');
         }
         //Loads the model to recieve lesson plans data
         $lessonPlansModel = $this->loadModel('lessonPlansModel');
@@ -32,24 +32,45 @@ class Admin extends Controller
                                                                 'isUserLoggedIn' =>$this->userModel->isUserLoggedIn()));
         
         require 'application/views/_templates/header.php';
-        require 'application/views/admin/index.php';
+        echo $this->dressTemplate('/admin/index', array('lessonPlans' => json_decode(file_get_contents(URL . 'lessonplans/getAllLessonPlans'),true),
+                                                        'users' => $this->userModel->getAllUsers()));
         require 'application/views/_templates/footer.php';
     }
-/*
+
     public function addUser()
     {
         if($this->userModel->isUserLoggedIn()!==1){
-            //$this->redirect('home');
+            $this->redirect('home');
         }
         // Check if we have POST data to create a new LessonPlan entry
-        if (isset($_POST["name"],$_POST["title"],$_POST["content"])) {
+        if (isset($_POST["username"],$_POST["password"],$_POST["userlevel"])) {
             // load model, perform an action on the model
-            $lessonPlansModel = $this->loadModel('LessonPlansModel');
-            $lessonPlansModel->addLessonPlan($_POST["name"],$_POST["title"],$_POST["content"]);
+            $this->userModel->addUser($_POST["username"],$_POST["password"],$_POST["userlevel"]);
         }
 
-        // where to go after song has been added
+        // where to go after user has been added
         header('location: ' . URL . 'admin/');
     }
-*/
+    public function deleteUser($userId)
+    {
+        if($this->userModel->isUserLoggedIn()!==1){
+            $this->redirect('home');
+        }
+        // Check if we have POST data to create a new LessonPlan entry
+        // load model, perform an action on the model
+        $this->userModel->deleteUser($userId);
+
+        // where to go after user has been added
+        header('location: ' . URL . 'admin/');
+    }
+
+    public function getAllUsers(){
+        if($this->userModel->isUserLoggedIn()!==1){
+            $this->redirect('home');
+        }
+        echo json_encode($this->userModel->getAllUsers());
+        header("Content-type: text/x-json");
+        $this->redirect('admin');
+    }
+
 }

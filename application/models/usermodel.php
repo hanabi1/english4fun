@@ -53,10 +53,40 @@ class UserModel
         
                 //admin = userlevel 1
                 //User  = userlevel 2
-                return $userDataFromDB['userlevel'];
+                return $userDataFromDB['userlevel']/1;
             }
         }
         //Anon/invalid user detected, returning false
         return false;
+    }
+    public function getAllUsers()
+    {
+        $sql = "SELECT username,userlevel,userid FROM users";
+        $query = $this->db->prepare($sql);
+        $query->execute();
+
+        // fetchAll() is the PDO method that gets all result rows, here in object-style because we defined this in
+        // libs/controller.php! If you prefer to get an associative array as the result, then do
+        // $query->fetchAll(PDO::FETCH_ASSOC); or change libs/controller.php's PDO options to
+        // $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC ...
+        return $query->fetchAll();
+    }
+    
+    public function addUser($userName, $password, $userLevel)
+    {
+        if($this->isUserLoggedIn()!==1){
+            $this->redirect('home');
+        }      
+        require_once('application/utils/hashing.php');
+
+        $sql = "INSERT INTO users (username, userlevel, hash) VALUES (:username, :userlevel, :hash)";
+        $query = $this->db->prepare($sql);
+        $query->execute(array(':username' => $userName, ':userlevel' => $userLevel, ':hash' => create_hash($password)));
+    }
+    public function deleteUser($userId)
+    {
+        $sql = "DELETE FROM users WHERE userid = :userid";
+        $query = $this->db->prepare($sql);
+        $query->execute(array(':userid' => $userId));
     }
 }
