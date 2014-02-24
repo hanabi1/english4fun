@@ -1,0 +1,48 @@
+INSTALL INSTRUCTIONS
+====================
+
+1 . Unzip this project file in it's entirety to you desired location.
+	
+	ex:
+	/english4fun
+
+2 . Move config.php from the folder /documentation to /application/config/
+
+	
+3 . Move /documentation/install/.htaccess(remove-this-parentheses) 
+	to the root dir
+
+	ex: 
+	/.htaccess(remove-this-parentheses)
+
+4 . Rename it to .htaccess and change base path to yours.
+
+	ex. 
+	RewriteBase /sub-dir/english4fun/
+
+5 . Modify the base path in config.php to your own project home folder
+	WARNING don't forget the / at the end
+
+	ex:
+    define('URL', 'http://localhost/english4fun/');
+
+6 . Input your DB password in config.php.
+    It's usually blank in testing enviroment(nudge, nudge...)
+   
+    ex:
+    define('DB_PASS', '');
+
+7 . Create a DB called 'english4fun' (utf-8) with Sequel Pro or Heidi etc
+ 
+
+8 . Copy the DB export's SQL into the SQL query window and...PRESTO!
+	
+	/documentation/install/english4fun.SQL
+	
+
+	===== Congrats! It should now work! =====
+
+
+
+There is also a very good tutorial on this MVC in the folder 
+/documentation/install/tutorial/
